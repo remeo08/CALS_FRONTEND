@@ -1,0 +1,7 @@
+.registerBtn {
+    all: unset;
+    cursor: pointer;
+    color: rgb(0, 119, 216);
+    font-size: 14px;
+    text-decoration: underline;
+}

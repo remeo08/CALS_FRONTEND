@@ -1,0 +1,23 @@
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+#email {
+    width: 300px;
+    height: 40px;
+    margin-top: 5px;
+}
+
+#password {
+    width: 300px;
+    height: 40px;
+    margin-top: 5px;
+}
+
+.errors {
+    font-size: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

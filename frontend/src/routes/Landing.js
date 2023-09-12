@@ -4,6 +4,7 @@ import './Landing.css';
 
 const Landing = () => {
     const navigate = useNavigate();
+
     return (
         <div className="container">
             <div className="wrapper">
@@ -12,7 +13,7 @@ const Landing = () => {
                     <div className="second">여러분의 칼로리를 칼스가 관리해드립니다!</div>
                     <div className="start">
                         <button
-                            class="fun-btn"
+                            className="fun-btn"
                             onClick={() => {
                                 navigate(`/login`);
                             }}
