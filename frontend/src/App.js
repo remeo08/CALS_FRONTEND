@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Landing from './routes/Landing';
+import Landing from './routes/Landing/Landing';
 // import Login from './routes/Login';
-import Main from './routes/Main';
+import Main from './routes/Main/Main';
 import GlobalStyles from './GlobalStyles';
 import './App.css';
-import Register from './routes/Register';
-import SignIn from './routes/SignIn';
-import MyPage from './routes/MyPage';
+import MyPage from './routes/MyPage/MyPage';
+import SignIn from './routes/Login/SignIn';
+import Register from './routes/SignUp/Register';
 
 const App = () => {
     return (
