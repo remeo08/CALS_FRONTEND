@@ -3,6 +3,7 @@ import Header from '../../components/Header';
 import './Main.css';
 import MyCalendar from '../../components/MyCalendar';
 import CalorieIntake from '../../components/CalorieIntake';
+import RecordList from '../../components/RecordList';
 
 const Main = () => {
     return (
@@ -25,6 +26,7 @@ const Main = () => {
                 <div class="menu-3">
                     <div class="card card_3">
                         <div class="image">우와</div>
+                        <RecordList />
                     </div>
                 </div>
             </div>
