@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom';
 import {
     Avatar,
     Button,
+    ButtonGroup,
+    InputLabel,
+    MenuItem,
     CssBaseline,
     TextField,
     FormControl,
@@ -14,6 +17,8 @@ import {
     Box,
     Typography,
     Container,
+    Select,
+    SelectChangeEvent
 } from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
@@ -38,6 +43,11 @@ const Register = () => {
     const [passwordError, setPasswordError] = useState('');
     const [nameError, setNameError] = useState('');
     const [registerError, setRegisterError] = useState('');
+    const [activity, setActivity] = useState('');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setActivity(event.target.value);
+    };
     // const history = useHistory();
 
     const handleAgree = (event) => {
@@ -158,7 +168,7 @@ const Register = () => {
                                         type="password"
                                         id="rePassword"
                                         name="rePassword"
-                                        label="비밀번호 재입력"
+                                        label="비밀번호 확인"
                                         error={passwordError !== '' || false}
                                     />
                                 </Grid>
@@ -167,12 +177,51 @@ const Register = () => {
                                     <TextField
                                         required
                                         fullWidth
-                                        id="name"
-                                        name="name"
+                                        id="username"
+                                        name="username"
                                         label="이름"
                                         error={nameError !== '' || false}
                                     />
                                 </Grid>
+                                <FormHelperTexts>{nameError}</FormHelperTexts>
+                                <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                    <ButtonGroup required color="primary" variant="outlined" size="large">
+                                        <Button>남</Button>
+                                        <Button>여</Button>
+                                    </ButtonGroup>
+                                    <FormControl required sx={{ml:1, minWidth: 275 }}>
+                                        <InputLabel id="demo-simple-select-label">활동량</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={activity}
+                                            label="activity"
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value={10}>일상생활</MenuItem>
+                                            <MenuItem value={20}>30분 운동</MenuItem>
+                                            <MenuItem value={30}>60분 운동</MenuItem>
+                                            <MenuItem value={40}>그 이상</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                    <TextField
+                                        required
+                                        id="height"
+                                        name="height"
+                                        label="키(cm)"
+                                        error={nameError !== '' || false}
+                                    />
+                                    <TextField
+                                        required
+                                        id="weight"
+                                        name="weight"
+                                        label="몸무게(kg)"
+                                        error={nameError !== '' || false}
+                                    />
+                                </Grid>
+                                <FormHelperTexts>{nameError}</FormHelperTexts>
                                 <FormHelperTexts>{nameError}</FormHelperTexts>
                                 <Grid item xs={12}>
                                     <FormControlLabel
