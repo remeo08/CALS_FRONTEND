@@ -51,8 +51,8 @@ function SignIn() {
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
-                    style={{
-                        marginTop: 64,
+                    sx={{
+                        marginTop: 8,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -62,15 +62,15 @@ function SignIn() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        로그인
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate style={{ marginTop: 1 }}>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
                             id="email"
-                            label="Email Address"
+                            label="이메일 주소"
                             name="email"
                             autoComplete="email"
                             autoFocus
@@ -80,24 +80,24 @@ function SignIn() {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="비밀번호"
                             type="password"
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                        <Button type="submit" fullWidth variant="contained" style={{ marginTop: 3, marginBottom: 2 }}>
-                            Sign In
+                        {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
+                        <Button type="submit" fullWidth variant="contained" sx={{mt:5, mb:2}}>
+                            로그인
                         </Button>
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
-                                    Forgot password?
+                                    비밀번호 찾기
                                 </Link>
                             </Grid>
                             <Grid item>
                                 <button className="registerBtn" onClick={registerNav}>
-                                    {"Don't have an account? Sign Up"}
+                                    {"회원가입"}
                                 </button>
                             </Grid>
                         </Grid>

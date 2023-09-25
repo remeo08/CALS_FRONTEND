@@ -13,7 +13,6 @@ const App = () => {
     return (
         <BrowserRouter>
             <GlobalStyles />
-            <div>
                 <Routes>
                     <Route path="/" element={<Landing />} />
                     <Route path="/login" element={<SignIn />} />
@@ -21,7 +20,6 @@ const App = () => {
                     <Route path="/mypage" element={<MyPage />} />
                     <Route path="/main" element={<Main />} />
                 </Routes>
-            </div>
         </BrowserRouter>
     );
 };

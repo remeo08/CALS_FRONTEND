@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 import {
     Avatar,
     Button,
@@ -44,8 +44,14 @@ const Register = () => {
     const [nameError, setNameError] = useState('');
     const [registerError, setRegisterError] = useState('');
     const [activity, setActivity] = useState('');
+    const [selectedGender, setSelectedGender] = useState(false);
 
-    const handleChange = (event: SelectChangeEvent) => {
+    const handleGenderClick = (gender) => {
+        // 선택된 성별을 상태 변수에 업데이트
+        setSelectedGender(gender);
+    };
+
+    const handleChange = (event) => {
         setActivity(event.target.value);
     };
     // const history = useHistory();
@@ -185,12 +191,22 @@ const Register = () => {
                                 </Grid>
                                 <FormHelperTexts>{nameError}</FormHelperTexts>
                                 <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <ButtonGroup required color="primary" variant="outlined" size="large">
-                                        <Button>남</Button>
-                                        <Button>여</Button>
-                                    </ButtonGroup>
+                                <ButtonGroup color="primary" size="large">
+                                    <Button
+                                        variant={selectedGender === '남' ? 'contained' : 'outlined'}
+                                        onClick={() => handleGenderClick('남')}
+                                    >
+                                        남
+                                    </Button>
+                                    <Button
+                                        variant={selectedGender === '여' ? 'contained' : 'outlined'}
+                                        onClick={() => handleGenderClick('여')}
+                                    >
+                                        여
+                                    </Button>
+                                </ButtonGroup>
                                     <FormControl required sx={{ml:1, minWidth: 275 }}>
-                                        <InputLabel id="demo-simple-select-label">활동량</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">하루 운동량</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -198,10 +214,10 @@ const Register = () => {
                                             label="activity"
                                             onChange={handleChange}
                                         >
-                                            <MenuItem value={10}>일상생활</MenuItem>
-                                            <MenuItem value={20}>30분 운동</MenuItem>
-                                            <MenuItem value={30}>60분 운동</MenuItem>
-                                            <MenuItem value={40}>그 이상</MenuItem>
+                                            <MenuItem value={10}>안 함</MenuItem>
+                                            <MenuItem value={20}>10 ~ 30분</MenuItem>
+                                            <MenuItem value={30}>30 ~ 60분</MenuItem>
+                                            <MenuItem value={40}>1시간 이상</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
