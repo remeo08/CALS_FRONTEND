@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import {
     Avatar,
@@ -18,7 +19,8 @@ import {
     Typography,
     Container,
     Select,
-    SelectChangeEvent
+    SelectChangeEvent,
+    Input,
 } from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
@@ -46,6 +48,11 @@ const Register = () => {
     const [activity, setActivity] = useState('');
     const [selectedGender, setSelectedGender] = useState(false);
 
+    const navigate = useNavigate();
+
+    const [cookies] = useCookies(['access_token']);
+    // const history = useHistory();
+
     const handleGenderClick = (gender) => {
         // 선택된 성별을 상태 변수에 업데이트
         setSelectedGender(gender);
@@ -54,40 +61,55 @@ const Register = () => {
     const handleChange = (event) => {
         setActivity(event.target.value);
     };
-    // const history = useHistory();
 
     const handleAgree = (event) => {
         setChecked(event.target.checked);
     };
 
-    const onhandlePost = async (data) => {
-        const { email, name, password } = data;
-        const postData = { email, name, password };
+    const onhandlePost = (data) => {
+        const { email, username, password, height, weight, age } = data;
+        const postData = { email, username, password, gender: selectedGender, height, weight, age };
+        console.log('data 으악', data);
+        console.log('postData 젠장', postData);
 
-        // post
-        // await axios
-        //     .post('/member/join', postData)
-        //     .then(function (response) {
-        //         console.log(response, '성공');
-        //         history.push('/login');
-        //     })
-        //     .catch(function (err) {
-        //         console.log(err);
-        //         setRegisterError('회원가입에 실패하였습니다. 다시한번 확인해 주세요.');
-        //     });
+        axios
+            .post(
+                `http://127.0.0.1:8000/api/v1/users/signup`,
+                postData
+                // {
+                // headers: {
+                //     Authorization: `Bearer ${cookies.access_token}`,
+                // },
+                // withCredentials: true,
+                // }
+            )
+            .then(function (response) {
+                console.log(response, '성공');
+                navigate('/login', { replace: true });
+            })
+            .catch(function (err) {
+                console.error(err);
+                setRegisterError('회원가입에 실패하였습니다. 다시한번 확인해 주세요.');
+            });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const data = new FormData(e.currentTarget);
+        console.log(data, '너는 뭐야');
         const joinData = {
             email: data.get('email'),
-            name: data.get('name'),
+            username: data.get('username'),
             password: data.get('password'),
             rePassword: data.get('rePassword'),
+            gender: data.get('gender'),
+            height: data.get('height'),
+            weight: data.get('weight'),
+            age: data.get('age'),
         };
-        const { age, city, email, name, password, rePassword } = joinData;
+        const { age, city, email, username, password, rePassword, gender, height, weight } = joinData;
+        console.log(joinData, '123');
 
         // 이메일 유효성 체크
         const emailRegex =
@@ -106,8 +128,8 @@ const Register = () => {
 
         // 이름 유효성 검사
         const nameRegex = /^[가-힣a-zA-Z]+$/;
-        if (!nameRegex.test(name) || name.length < 1) setNameError('올바른 이름을 입력해주세요.');
-        else setNameError('');
+        // if (!nameRegex.test(name) || name.length < 1) setNameError('올바른 이름을 입력해주세요.');
+        // else setNameError('');
 
         // 회원가입 동의 체크
         if (!checked) alert('회원가입 약관에 동의해주세요.');
@@ -116,7 +138,7 @@ const Register = () => {
             emailRegex.test(email) &&
             passwordRegex.test(password) &&
             password === rePassword &&
-            nameRegex.test(name) &&
+            nameRegex.test(username) &&
             checked
         ) {
             onhandlePost(joinData);
@@ -179,7 +201,7 @@ const Register = () => {
                                     />
                                 </Grid>
                                 <FormHelperTexts>{passwordError}</FormHelperTexts>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <TextField
                                         required
                                         fullWidth
@@ -188,24 +210,22 @@ const Register = () => {
                                         label="이름"
                                         error={nameError !== '' || false}
                                     />
+                                    <FormControl required sx={{ ml: 1, minWidth: 50 }}>
+                                        <InputLabel id="demo-simple-select-label">나이</InputLabel>
+                                        <Input
+                                            id="age"
+                                            name="age"
+                                            type="number"
+                                            label="age"
+                                            min="0"
+                                            max="200"
+                                            maxLength={3}
+                                        ></Input>
+                                    </FormControl>
                                 </Grid>
                                 <FormHelperTexts>{nameError}</FormHelperTexts>
-                                <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between'}}>
-                                <ButtonGroup color="primary" size="large">
-                                    <Button
-                                        variant={selectedGender === '남' ? 'contained' : 'outlined'}
-                                        onClick={() => handleGenderClick('남')}
-                                    >
-                                        남
-                                    </Button>
-                                    <Button
-                                        variant={selectedGender === '여' ? 'contained' : 'outlined'}
-                                        onClick={() => handleGenderClick('여')}
-                                    >
-                                        여
-                                    </Button>
-                                </ButtonGroup>
-                                    <FormControl required sx={{ml:1, minWidth: 275 }}>
+                                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <FormControl fullWidth required>
                                         <InputLabel id="demo-simple-select-label">하루 운동량</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
@@ -220,8 +240,22 @@ const Register = () => {
                                             <MenuItem value={40}>1시간 이상</MenuItem>
                                         </Select>
                                     </FormControl>
+                                    <ButtonGroup color="primary" size="large" sx={{ ml: 1 }}>
+                                        <Button
+                                            variant={selectedGender === 'male' ? 'contained' : 'outlined'}
+                                            onClick={() => handleGenderClick('male')}
+                                        >
+                                            남
+                                        </Button>
+                                        <Button
+                                            variant={selectedGender === 'female' ? 'contained' : 'outlined'}
+                                            onClick={() => handleGenderClick('female')}
+                                        >
+                                            여
+                                        </Button>
+                                    </ButtonGroup>
                                 </Grid>
-                                <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <TextField
                                         required
                                         id="height"
