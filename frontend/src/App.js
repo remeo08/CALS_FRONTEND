@@ -13,13 +13,13 @@ const App = () => {
     return (
         <BrowserRouter>
             <GlobalStyles />
-                <Routes>
-                    <Route path="/" element={<Landing />} />
-                    <Route path="/login" element={<SignIn />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/main" element={<Main />} />
-                </Routes>
+            <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<SignIn />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/mypage" element={<MyPage />} />
+                <Route path="/main" element={<Main />} />
+            </Routes>
         </BrowserRouter>
     );
 };

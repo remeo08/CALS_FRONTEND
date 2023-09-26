@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './SignIn.css';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { SignInApi } from '../../API';
 
 // function Copyright(props) {
 //     return (
@@ -31,19 +33,61 @@ import './SignIn.css';
 const defaultTheme = createTheme();
 
 function SignIn() {
+    const [signInError, setSignInError] = useState('');
+
     const navigate = useNavigate();
 
-    const registerNav = () => {
-        navigate('/register');
-    };
+    const [cookies, setCookie] = useCookies(['access_token']);
+    const [refresh, setRefresh] = useCookies(['refresh_token']);
+    const accessToken = cookies.access_token;
+
+    useEffect(() => {
+        // 여기서 accessToken을 사용하여 로그인 상태를 확인하고 원하는 작업을 수행합니다.
+        // 예를 들어, 유효한 토큰이 없다면 로그아웃 처리를 수행할 수 있습니다.
+        if (accessToken) {
+            navigate('/main');
+        }
+    }, [accessToken]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const loginData = {
             email: data.get('email'),
             password: data.get('password'),
-        });
+        };
+
+        // axios
+        //     .post(`http://127.0.0.1:8000/api/v1/users/login/token`, loginData)
+        //     .then(function (response) {
+        //         console.log(response, '성공');
+        //         // JWT 토큰을 쿠키에 저장합니다.
+        //         setCookie('access_token', response.access, { path: '/' });
+
+        //         // "main" 컴포넌트로 리디렉션합니다.
+        //         navigate('/main', { replace: true });
+        //     })
+        //     .catch(function (err) {
+        //         console.error(err);
+        //         setSignInError('로그인에 실패하였습니다. 다시한번 확인해 주세요.');
+        //     });
+
+        SignInApi(loginData)
+            .then((responseData) => {
+                // 성공적으로 데이터를 가져온 경우 실행할 코드
+                console.log(responseData, '성공');
+                // JWT 토큰을 쿠키에 저장합니다.
+                setCookie('access_token', responseData.access, { path: '/' });
+                setRefresh('refresh_token', responseData.refresh, { path: '/' });
+
+                //"main" 컴포넌트로 리디렉션합니다.
+                navigate('/main', { replace: true });
+            })
+            .catch((error) => {
+                // 오류 발생 시 실행할 코드
+                console.error(error);
+                setSignInError('로그인에 실패하였습니다. 다시한번 확인해 주세요.');
+            });
     };
 
     return (
@@ -86,19 +130,17 @@ function SignIn() {
                             autoComplete="current-password"
                         />
                         {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
-                        <Button type="submit" fullWidth variant="contained" sx={{mt:5, mb:2}}>
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 5, mb: 2 }}>
                             로그인
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                {/* <Link href="#" variant="body2">
                                     비밀번호 찾기
-                                </Link>
+                                </Link> */}
                             </Grid>
                             <Grid item>
-                                <button className="registerBtn" onClick={registerNav}>
-                                    {"회원가입"}
-                                </button>
+                                <Link to="/register">{'회원가입'}</Link>
                             </Grid>
                         </Grid>
                     </Box>

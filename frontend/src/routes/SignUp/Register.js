@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
@@ -24,6 +24,7 @@ import {
 } from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
+import { RegisterApi } from '../../API';
 
 // mui의 css 우선순위가 높기때문에 important를 설정 - 실무하다 보면 종종 발생 우선순위 문제
 const FormHelperTexts = styled(FormHelperText)`
@@ -50,8 +51,18 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    const [cookies] = useCookies(['access_token']);
-    // const history = useHistory();
+    const [cookies, setCookie] = useCookies(['access_token']);
+    const [refresh, setRefresh] = useCookies(['refresh_token']);
+
+    const accessToken = cookies.access_token;
+
+    useEffect(() => {
+        // 여기서 accessToken을 사용하여 로그인 상태를 확인하고 원하는 작업을 수행합니다.
+        // 예를 들어, 유효한 토큰이 없다면 로그아웃 처리를 수행할 수 있습니다.
+        if (accessToken) {
+            navigate('/main');
+        }
+    }, [accessToken]);
 
     const handleGenderClick = (gender) => {
         // 선택된 성별을 상태 변수에 업데이트
@@ -68,27 +79,48 @@ const Register = () => {
 
     const onhandlePost = (data) => {
         const { email, username, password, height, weight, age } = data;
-        const postData = { email, username, password, gender: selectedGender, height, weight, age };
+        const postData = { email, username, password, gender: selectedGender, height, weight, age, activity };
         console.log('data 으악', data);
         console.log('postData 젠장', postData);
 
-        axios
-            .post(
-                `http://127.0.0.1:8000/api/v1/users/signup`,
-                postData
-                // {
-                // headers: {
-                //     Authorization: `Bearer ${cookies.access_token}`,
-                // },
-                // withCredentials: true,
-                // }
-            )
-            .then(function (response) {
-                console.log(response, '성공');
-                navigate('/login', { replace: true });
+        // axios
+        //     .post(
+        //         `http://127.0.0.1:8000/api/v1/users/signup`,
+        //         postData
+        //         // {
+        //         // headers: {
+        //         //     Authorization: `Bearer ${cookies.access_token}`,
+        //         // },
+        //         // withCredentials: true,
+        //         // }
+        //     )
+        //     .then(function (response) {
+        //         console.log(response, '성공');
+        //         // JWT 토큰을 쿠키에 저장합니다.
+        //         setCookie('access_token', response.data.access_token, { path: '/' });
+
+        //         // "main" 컴포넌트로 리디렉션합니다.
+        //         navigate('/main', { replace: true });
+        //     })
+        //     .catch(function (err) {
+        //         console.error(err);
+        //         setRegisterError('회원가입에 실패하였습니다. 다시한번 확인해 주세요.');
+        //     });
+
+        RegisterApi(postData)
+            .then((responseData) => {
+                // 성공적으로 데이터를 가져온 경우 실행할 코드
+                console.log(responseData, '성공');
+                // JWT 토큰을 쿠키에 저장합니다.
+                setCookie('access_token', responseData.access, { path: '/' });
+                setRefresh('refresh_token', responseData.refresh, { path: '/' });
+
+                //"main" 컴포넌트로 리디렉션합니다.
+                navigate('/main', { replace: true });
             })
-            .catch(function (err) {
-                console.error(err);
+            .catch((error) => {
+                // 오류 발생 시 실행할 코드
+                console.error(error);
                 setRegisterError('회원가입에 실패하였습니다. 다시한번 확인해 주세요.');
             });
     };
@@ -207,7 +239,7 @@ const Register = () => {
                                         fullWidth
                                         id="username"
                                         name="username"
-                                        label="이름"
+                                        label="nickname"
                                         error={nameError !== '' || false}
                                     />
                                     <FormControl required sx={{ ml: 1, minWidth: 50 }}>
@@ -234,10 +266,10 @@ const Register = () => {
                                             label="activity"
                                             onChange={handleChange}
                                         >
-                                            <MenuItem value={10}>안 함</MenuItem>
-                                            <MenuItem value={20}>10 ~ 30분</MenuItem>
-                                            <MenuItem value={30}>30 ~ 60분</MenuItem>
-                                            <MenuItem value={40}>1시간 이상</MenuItem>
+                                            <MenuItem value={'lowest'}>안 함</MenuItem>
+                                            <MenuItem value={'low'}>10 ~ 30분</MenuItem>
+                                            <MenuItem value={'middle'}>30 ~ 60분</MenuItem>
+                                            <MenuItem value={'high'}>1시간 이상</MenuItem>
                                         </Select>
                                     </FormControl>
                                     <ButtonGroup color="primary" size="large" sx={{ ml: 1 }}>
