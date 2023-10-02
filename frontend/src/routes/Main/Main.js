@@ -6,6 +6,7 @@ import CalorieIntake from '../../components/CalorieIntake';
 import RecordList from '../../components/RecordList';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import Backdrop from '../../components/Backdrop';
 
 const Main = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
@@ -13,7 +14,6 @@ const Main = () => {
     const navigate = useNavigate();
 
     var x = document.cookie;
-    console.log(x, '바보');
 
     useEffect(() => {
         // 여기서 accessToken을 사용하여 로그인 상태를 확인하고 원하는 작업을 수행합니다.
@@ -41,8 +41,10 @@ const Main = () => {
                 </div>
                 <div className="menu-3">
                     <div className="card card_3">
-                        <div className="image">우와</div>
-                        <RecordList />
+                        <div className="image">오늘의 기록</div>
+                        <div className="backDrop">
+                            <Backdrop />
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,109 @@
+.css-1sgmgau {
+    height: 500px;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.searchIcon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 500;
+}
+
+.searchBtn {
+    display: flex;
+    align-items: center;
+}
+
+.searchError {
+    margin-top: 10px;
+    padding-left: 16px;
+}
+
+.searchData {
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.searchTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(0, 0, 0);
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.searchTitle > * {
+    flex: 1;
+    text-align: center;
+}
+
+.searchResult {
+    margin-top: 10px;
+}
+
+.searchList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted gray;
+    padding-left: 10px;
+}
+
+.searchList > * {
+    flex: 1;
+    text-align: center;
+}
+
+.mealTime {
+    margin-top: 10px;
+}
+
+.mealTypeText {
+    margin-top: 10px;
+}
+
+.deleteBtn {
+    cursor: pointer;
+    z-index: 999;
+}
+
+.searchSelect {
+    width: 400px;
+    height: 300px;
+    border: 1px solid black;
+    border-top: none;
+    border-radius: 0px 0px 10px 10px;
+    overflow-y: scroll;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 999;
+    background-color: white;
+}
+
+.searchLine {
+    width: 100%;
+    font-size: 16px;
+}
+
+.nutrition {
+    color: gray;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.choiceData {
+    height: 200px;
+    overflow-y: scroll;
+}

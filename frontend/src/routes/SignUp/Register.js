@@ -199,6 +199,9 @@ const Register = () => {
                                 <Grid item xs={12}>
                                     <TextField
                                         required
+                                        onBlur={() => {
+                                            console.log('유효성');
+                                        }}
                                         autoFocus
                                         fullWidth
                                         type="email"
@@ -239,7 +242,7 @@ const Register = () => {
                                         fullWidth
                                         id="username"
                                         name="username"
-                                        label="nickname"
+                                        label="이름 또는 닉네임"
                                         error={nameError !== '' || false}
                                     />
                                     <FormControl required sx={{ ml: 1, minWidth: 50 }}>

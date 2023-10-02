@@ -98,11 +98,11 @@ h1 {
 }
 
 .card_1 {
-    height: 300px;
+    height: 330px;
 }
 
 .card_2 {
-    height: 300px;
+    height: 330px;
 }
 
 .card_3 {
@@ -112,4 +112,10 @@ h1 {
 .cardTitle2 {
     margin-left: 1vw;
     margin-top: 0.8vw;
+}
+
+.backDrop {
+    display: flex;
+    justify-content: end;
+    margin-right: 20px;
 }

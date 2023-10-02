@@ -86,3 +86,11 @@ export function UserApi() {
 export function LogoutApi() {
     return instance.post(`users/logout`, { refresh_token: getCookie('refresh_token') });
 }
+
+export function updateApi(data) {
+    return instance.put(`users/`, data);
+}
+
+export function todayRecordApi() {
+    return instance.post(`diets/meal`);
+}

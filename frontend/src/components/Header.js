@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { LogoutApi, UserApi } from '../API';
 import './Header.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 const Header = () => {
     const navigate = useNavigate();
     const [nickname, setNickname] = useState('');
-    const [cookies, getCookie] = useCookies();
+    // const [cookies, getCookie] = useCookies();
     const [, , removeCookie] = useCookies([]); // 쓰지 않는 변수는 (공백),처리해주고 removeCookie 옵션만 사용한다
 
     const myPageNav = () => {

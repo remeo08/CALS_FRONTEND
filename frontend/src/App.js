@@ -8,18 +8,21 @@ import './App.css';
 import MyPage from './routes/MyPage/MyPage';
 import SignIn from './routes/Login/SignIn';
 import Register from './routes/SignUp/Register';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const App = () => {
     return (
         <BrowserRouter>
-            <GlobalStyles />
-            <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/login" element={<SignIn />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/mypage" element={<MyPage />} />
-                <Route path="/main" element={<Main />} />
-            </Routes>
+            <ChakraProvider>
+                <GlobalStyles />
+                <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/login" element={<SignIn />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/mypage" element={<MyPage />} />
+                    <Route path="/main" element={<Main />} />
+                </Routes>
+            </ChakraProvider>
         </BrowserRouter>
     );
 };
