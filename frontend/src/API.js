@@ -91,6 +91,14 @@ export function updateApi(data) {
     return instance.put(`users/`, data);
 }
 
-export function todayRecordApi() {
-    return instance.post(`diets/meal`);
+export function updateRecordApi(data) {
+    return instance.put(`diets/`, data);
+}
+
+export function todayRecordApi(data) {
+    return instance.post(`diets/ `, data);
+}
+
+export function userDataApi(date) {
+    return instance.get(`diets/?created_date=${date}`);
 }

@@ -7,7 +7,7 @@ const CalorieIntake = () => {
                 <div className="CalorieIntakeText line_2">몸무게</div>
             </div>
             <div className="rightBox">
-                <div className="CalorieIntakeText line_3">오늘의 칭찬 점수</div>
+                <div className="CalorieIntakeText line_3">오늘의 꿀꿀 점수</div>
                 <div className="CalorieIntakeText line_4">오늘의 한줄평</div>
             </div>
         </div>

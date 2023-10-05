@@ -19,9 +19,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandPointRight, faL, faSearch } from '@fortawesome/free-solid-svg-icons';
 import './Backdrop.css';
 import axios from 'axios';
-import { todayRecordApi } from '../API';
+import { todayRecordApi, updateRecordApi } from '../API';
 
-export default function Backdrop() {
+export default function ModifyModal({ dietData }) {
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,7 +50,13 @@ export default function Backdrop() {
     const [quantity, setQuantity] = useState(1);
 
     const choiceDiet = (diet) => {
-        setDiet((prev) => [...prev, diet]);
+        const formattedDiet = {
+            food_name: diet.DESC_KOR,
+            food_gram: diet.SERVING_SIZE,
+            food_calorie: diet.NUTR_CONT1,
+        };
+
+        setDiet((prev) => [...prev, formattedDiet]);
         setDropdown(false);
         setResponseData([]);
     };
@@ -75,6 +81,9 @@ export default function Backdrop() {
             // 모달이 열릴 때 추가된 내용을 불러오는 API 호출 또는 다른 데이터 로딩 로직을 추가합니다.
             // 이 예제에서는 빈 배열을 사용하여 모달이 열릴 때마다 빈 데이터를 표시하도록 했습니다.
             setResponseData([]);
+            setDiet(dietData.selected_diet);
+            console.log('값이 왜이래', dietData.selected_diet);
+            setSelectedMealType(dietData.meal_category);
         }
     }, [isOpen]);
 
@@ -116,10 +125,6 @@ export default function Backdrop() {
         onClose();
     };
 
-    // const handleQuantity = (e) => {
-    //     setQuantity(e.target.value);
-    // };
-
     const saveDiets = () => {
         if (diet.length === 0 || !selectedMealType) {
             alert('되겠냐');
@@ -142,7 +147,7 @@ export default function Backdrop() {
             selected_diet,
         };
         console.log('todaydata', data);
-        todayRecordApi(data);
+        updateRecordApi(data);
         onClose();
     };
 
@@ -183,7 +188,7 @@ export default function Backdrop() {
         for (let item in diet) {
             console.log('열량', item);
             console.log('식단', diet);
-            result += +diet[item].NUTR_CONT1;
+            result += +diet[item].food_calorie;
         }
         return result.toFixed(2);
     }
@@ -191,14 +196,14 @@ export default function Backdrop() {
     return (
         <>
             <Button
-                width="5vw"
-                height="4vh"
+                width="4vw"
+                height="3vh"
                 onClick={() => {
                     setOverlay(<OverlayOne />);
                     onOpen();
                 }}
             >
-                추가
+                수정
             </Button>
             <Modal isCentered isOpen={isOpen} onClose={onCloseModal}>
                 {overlay}
@@ -275,7 +280,7 @@ export default function Backdrop() {
                             <div className="searchData">
                                 <ul className="searchTitle">
                                     <li>식품이름</li>
-                                    <li>총 내용량(g)</li>
+                                    <li>ㅂ내용량(g)</li>
                                     <li>수량</li>
                                     <li>열량(kcal)</li>
                                     <li>삭제</li>
@@ -283,17 +288,17 @@ export default function Backdrop() {
                                 <ul className="choiceData">
                                     {diet?.map((item, index) => (
                                         <div className="searchList" key={index}>
-                                            <li className="searchLine">{item.DESC_KOR}</li>
-                                            <li className="searchLine">{item.SERVING_SIZE}</li>
+                                            <li className="searchLine">{item.food_name}</li>
+                                            <li className="searchLine">{item.food_gram}</li>
                                             <input
                                                 className="searchLine"
                                                 type="number"
-                                                defaultValue={1}
+                                                defaultValue={item.food_quantity}
                                                 onChange={(e) => {
                                                     setQuantity(parseInt(e.target.value), 10);
                                                 }}
                                             />
-                                            <li className="searchLine">{item.NUTR_CONT1 * quantity}</li>
+                                            <li className="searchLine">{item.food_calorie * quantity}</li>
                                             <button
                                                 className="deleteBtn"
                                                 aria-label="delete"

@@ -1,0 +1,53 @@
+.userDiet {
+    display: flex;
+}
+
+.meal {
+    margin-top: 10px;
+    width: 25%;
+    height: 240px;
+    border: 1px solid gray;
+}
+
+.item2 {
+    list-style-type: none;
+}
+
+.meal_title {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 30px 0px 30px;
+    border-bottom: 1px solid gray;
+}
+
+.mealList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted gray;
+    overflow-y: scroll;
+    /* padding-left: 10px; */
+}
+
+.mealList > * {
+    flex: 1;
+    text-align: center;
+}
+
+.mealScroll {
+    height: 150px;
+    overflow-y: scroll;
+}
+
+.btnCss {
+    display: flex;
+    justify-content: end;
+    margin-right: 40px;
+    /* margin-top: 5px; */
+}
+
+.modifyBtn {
+    cursor: pointer;
+}

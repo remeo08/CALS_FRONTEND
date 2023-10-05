@@ -75,7 +75,7 @@
 
 .deleteBtn {
     cursor: pointer;
-    z-index: 999;
+    /* z-index: 999; */
 }
 
 .searchSelect {
@@ -104,6 +104,13 @@
 }
 
 .choiceData {
-    height: 200px;
+    height: 185px;
     overflow-y: scroll;
+}
+
+.total {
+    padding-top: 25px;
+    text-align: right;
+    font-weight: bold;
+    color: tomato;
 }
