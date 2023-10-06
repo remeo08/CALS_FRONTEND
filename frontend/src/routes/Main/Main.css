@@ -98,16 +98,16 @@ h1 {
 }
 
 .card_1 {
-    height: 330px;
+    height: 310px;
     padding: 10px;
 }
 
 .card_2 {
-    height: 330px;
+    height: 310px;
 }
 
 .card_3 {
-    height: 330px;
+    height: 350px;
     padding: 10px;
 }
 
@@ -150,4 +150,16 @@ h1 {
     font-size: 50px;
     font-weight: bold;
     text-align: center;
+}
+
+.allTotal {
+    height: 50px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-right: 10px;
+    color: rgb(196, 21, 212);
+    font-size: 20px;
+    font-weight: bolder;
+    padding-top: 10px;
 }

@@ -18,6 +18,10 @@ function getCookie(name) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
+function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
 function setCookie(name, value, options = {}) {
     options = {
         path: '/', // 경로 지정
@@ -64,6 +68,8 @@ instance.interceptors.response.use(
                 setCookie('refresh_token', response.data.refresh);
                 return instance(error.config);
             }
+            deleteCookie('access_token');
+            deleteCookie('refresh_token');
         }
         refresh = false;
         return error;
@@ -97,6 +103,9 @@ export function updateRecordApi(data) {
 
 export function todayRecordApi(data) {
     return instance.post(`diets/ `, data);
+}
+export function deleteRecordApi(date, category) {
+    return instance.delete(`diets/?created_date=${date}&meal_category=${category} `);
 }
 
 export function userDataApi(date) {

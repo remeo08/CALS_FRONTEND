@@ -21,7 +21,7 @@ import './Backdrop.css';
 import axios from 'axios';
 import { todayRecordApi } from '../API';
 
-export default function Backdrop() {
+export default function Backdrop({ userDietInfo }) {
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -125,7 +125,7 @@ export default function Backdrop() {
             alert('되겠냐');
             return;
         }
-        console.log('방울뱀이다', diet);
+        // console.log('방울뱀이다', diet);
         const selected_diet = [];
         for (let item in diet) {
             const mealData = {
@@ -141,8 +141,11 @@ export default function Backdrop() {
             meal_calorie: sumCal(),
             selected_diet,
         };
-        console.log('todaydata', data);
-        todayRecordApi(data);
+        // console.log('todaydata', data);
+        todayRecordApi(data).then((response) => userDietInfo((prev) => [...prev, response.data]));
+        setDiet([]);
+        setSelectedMealType(null);
+        setSearch('');
         onClose();
     };
 
@@ -176,13 +179,13 @@ export default function Backdrop() {
                 setError(error);
             });
     };
-    console.log('들어오냐?', responseData);
+    // console.log('들어오냐?', responseData);
 
     function sumCal() {
         let result = 0;
         for (let item in diet) {
-            console.log('열량', item);
-            console.log('식단', diet);
+            // console.log('열량', item);
+            // console.log('식단', diet);
             result += +diet[item].NUTR_CONT1;
         }
         return result.toFixed(2);
@@ -191,8 +194,8 @@ export default function Backdrop() {
     return (
         <>
             <Button
-                width="5vw"
-                height="4vh"
+                width="3.5vw"
+                height="2.5vh"
                 onClick={() => {
                     setOverlay(<OverlayOne />);
                     onOpen();

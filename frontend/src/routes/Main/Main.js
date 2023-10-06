@@ -14,6 +14,7 @@ const Main = () => {
     const accessToken = cookies.access_token;
     const navigate = useNavigate();
     const [userDietInfo, setUserDietInfo] = useState([]);
+    console.log('너는 뭐냐', userDietInfo);
 
     useEffect(() => {
         let today = new Date();
@@ -21,7 +22,6 @@ const Main = () => {
         let year = today.getFullYear(); // 년도
         let month = today.getMonth() + 1; // 월
         let date = today.getDate(); // 날짜
-        console.log('날짜', date);
 
         const todayDate = year + '-' + month + '-' + date;
         // document.write(year + '-' + month + '-' + date);
@@ -52,11 +52,11 @@ const Main = () => {
                 <div className="menu-3">
                     <div className="card card_3">
                         <div className="image">
-                            이게 맞아?
-                            <Backdrop />
+                            꿀꿀 식단
+                            <Backdrop userDietInfo={setUserDietInfo} />
                         </div>
                         <div className="dataBox">
-                            {userDietInfo.length === 0 ? (
+                            {userDietInfo?.length === 0 ? (
                                 <div>
                                     <div className="dataImg">
                                         <img src={`${process.env.PUBLIC_URL}/img/calsdata.png`} />
@@ -67,11 +67,13 @@ const Main = () => {
                                 </div>
                             ) : (
                                 <div>
-                                    <UserDiet diet={userDietInfo} />{' '}
+                                    <UserDiet diet={userDietInfo} key={userDietInfo} />
                                 </div>
                             )}
                         </div>
-                        <div className="backDrop"></div>
+                        <div className="allTotal">
+                            총 열량 : {userDietInfo[userDietInfo.length - 1]?.daily_calorie_sum} kcal
+                        </div>
                     </div>
                 </div>
             </div>

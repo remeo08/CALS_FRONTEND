@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './UserDiet.css';
 import ModifyModal from './ModifyModal';
+import { Button } from '@chakra-ui/react';
+import { deleteRecordApi } from '../API';
 
 const UserDiet = ({ diet }) => {
     const [dietData, setDietData] = useState({ breakfast: {}, lunch: {}, dinner: {}, snack: {} });
@@ -10,12 +12,26 @@ const UserDiet = ({ diet }) => {
             setDietData((prev) => ({ ...prev, [diet[i]['meal_category']]: diet[i] }));
         }
     }, []);
+
+    const remove = (category) => {
+        let today = new Date();
+
+        let year = today.getFullYear(); // 년도
+        let month = today.getMonth() + 1; // 월
+        let date = today.getDate(); // 날짜
+
+        const todayDate = year + '-' + month + '-' + date;
+
+        deleteRecordApi(todayDate, category).then(() => setDietData((prev) => ({ ...prev, [category]: {} })));
+        // setDietData((prev) => ({ ...prev, [category]: {} }))
+    };
+
     return (
         <div className="userDiet">
             <div className="meal">
                 <div className="meal_title">
-                    <div>아침</div>
-                    <div>총 열량 : {dietData['breakfast'].meal_calorie} kcal</div>
+                    <div className="mealType">아침</div>
+                    <div>열량 : {dietData['breakfast'].meal_calorie ? dietData['breakfast'].meal_calorie : 0} kcal</div>
                 </div>
                 <ul className="searchTitle">
                     <li>식품이름</li>
@@ -34,13 +50,25 @@ const UserDiet = ({ diet }) => {
                     ))}
                 </ul>
                 <div className="btnCss">
-                    <ModifyModal dietData={dietData['breakfast']} />
+                    {dietData['breakfast'].meal_calorie ? (
+                        <Button
+                            width="4vw"
+                            height="3vh"
+                            marginRight="5px"
+                            onClick={() => {
+                                remove('breakfast');
+                            }}
+                        >
+                            삭제
+                        </Button>
+                    ) : null}
+                    {dietData['breakfast'].meal_calorie ? <ModifyModal dietData={dietData['breakfast']} /> : null}
                 </div>
             </div>
             <div className="meal">
                 <div className="meal_title">
-                    <div>점심</div>
-                    <div>총 열량 : {dietData['lunch'].meal_calorie} kcal</div>
+                    <div className="mealType">점심</div>
+                    <div>열량 : {dietData['lunch'].meal_calorie ? dietData['lunch'].meal_calorie : 0} kcal</div>
                 </div>
                 <ul className="searchTitle">
                     <li>식품이름</li>
@@ -59,13 +87,25 @@ const UserDiet = ({ diet }) => {
                     ))}
                 </ul>
                 <div className="btnCss">
-                    <ModifyModal dietData={dietData['lunch']} />
+                    {dietData['lunch'].meal_calorie ? (
+                        <Button
+                            width="4vw"
+                            height="3vh"
+                            marginRight="5px"
+                            onClick={() => {
+                                remove('lunch');
+                            }}
+                        >
+                            삭제
+                        </Button>
+                    ) : null}
+                    {dietData['lunch'].meal_calorie ? <ModifyModal dietData={dietData['lunch']} /> : null}
                 </div>
             </div>
             <div className="meal">
                 <div className="meal_title">
-                    <div>저녁</div>
-                    <div>총 열량 : {dietData['dinner'].meal_calorie} kcal</div>
+                    <div className="mealType">저녁</div>
+                    <div>열량 : {dietData['dinner'].meal_calorie ? dietData['dinner'].meal_calorie : 0} kcal</div>
                 </div>
                 <ul className="searchTitle">
                     <li>식품이름</li>
@@ -84,13 +124,25 @@ const UserDiet = ({ diet }) => {
                     ))}
                 </ul>
                 <div className="btnCss">
-                    <ModifyModal dietData={dietData['dinner']} />
+                    {dietData['dinner'].meal_calorie ? (
+                        <Button
+                            width="4vw"
+                            height="3vh"
+                            marginRight="5px"
+                            onClick={() => {
+                                remove('dinner');
+                            }}
+                        >
+                            삭제
+                        </Button>
+                    ) : null}
+                    {dietData['dinner'].meal_calorie ? <ModifyModal dietData={dietData['dinner']} /> : null}
                 </div>
             </div>
             <div className="meal">
                 <div className="meal_title">
-                    <div>간식</div>
-                    <div>총 열량 : {dietData['snack'].meal_calorie} kcal</div>
+                    <div className="mealType">간식</div>
+                    <div>열량 : {dietData['snack'].meal_calorie ? dietData['snack'].meal_calorie : 0} kcal</div>
                 </div>
                 <ul className="searchTitle">
                     <li>식품이름</li>
@@ -109,7 +161,19 @@ const UserDiet = ({ diet }) => {
                     ))}
                 </ul>
                 <div className="btnCss">
-                    <ModifyModal dietData={dietData['snack']} />
+                    {dietData['snack'].meal_calorie ? (
+                        <Button
+                            width="4vw"
+                            height="3vh"
+                            marginRight="5px"
+                            onClick={() => {
+                                remove('snack');
+                            }}
+                        >
+                            삭제
+                        </Button>
+                    ) : null}
+                    {dietData['snack'].meal_calorie ? <ModifyModal dietData={dietData['snack']} /> : null}
                 </div>
             </div>
         </div>

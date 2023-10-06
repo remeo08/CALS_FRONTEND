@@ -82,7 +82,7 @@ export default function ModifyModal({ dietData }) {
             // 이 예제에서는 빈 배열을 사용하여 모달이 열릴 때마다 빈 데이터를 표시하도록 했습니다.
             setResponseData([]);
             setDiet(dietData.selected_diet);
-            console.log('값이 왜이래', dietData.selected_diet);
+            // console.log('값이 왜이래', dietData.selected_diet);
             setSelectedMealType(dietData.meal_category);
         }
     }, [isOpen]);
@@ -181,13 +181,13 @@ export default function ModifyModal({ dietData }) {
                 setError(error);
             });
     };
-    console.log('들어오냐?', responseData);
+    // console.log('들어오냐?', responseData);
 
     function sumCal() {
         let result = 0;
         for (let item in diet) {
-            console.log('열량', item);
-            console.log('식단', diet);
+            // console.log('열량', item);
+            // console.log('식단', diet);
             result += +diet[item].food_calorie;
         }
         return result.toFixed(2);
@@ -280,7 +280,7 @@ export default function ModifyModal({ dietData }) {
                             <div className="searchData">
                                 <ul className="searchTitle">
                                     <li>식품이름</li>
-                                    <li>ㅂ내용량(g)</li>
+                                    <li>내용량(g)</li>
                                     <li>수량</li>
                                     <li>열량(kcal)</li>
                                     <li>삭제</li>

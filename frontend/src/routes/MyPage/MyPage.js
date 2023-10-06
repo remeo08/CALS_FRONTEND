@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import { Cookies, useCookies } from 'react-cookie';
 import axios from 'axios';
 import {
     Avatar,
@@ -48,6 +48,9 @@ const MyPage = () => {
     const [registerError, setRegisterError] = useState('');
     const [activity, setActivity] = useState('');
     const [selectedGender, setSelectedGender] = useState(false);
+
+    const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
+    const accessToken = cookies.access_token;
 
     const [user, setUser] = useState('');
 
@@ -125,6 +128,9 @@ const MyPage = () => {
             setUser(res.data);
             setActivity(res.data?.activity);
         });
+        if (!accessToken) {
+            navigate('/login');
+        }
     }, []);
     if (!user) {
         return <div>Loading...</div>;
