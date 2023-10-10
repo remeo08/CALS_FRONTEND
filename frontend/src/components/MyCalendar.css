@@ -105,7 +105,7 @@
 
 .react-calendar__tile {
     max-width: 100%;
-    padding: 10px 6.6667px;
+    padding: 5px 6.6667px;
     background: none;
     text-align: center;
     line-height: 16px;
@@ -157,3 +157,18 @@
         width: 300px;
     }
 } */
+
+.dotFlex {
+    display: flex;
+    justify-content: center;
+    /* margin-top: 10px; */
+}
+
+.dot {
+    height: 8px;
+    width: 8px;
+    background-color: #f87171;
+    border-radius: 50%;
+    display: flex;
+    margin-left: 1px;
+}

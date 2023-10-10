@@ -70,13 +70,13 @@ const MyPage = () => {
     };
 
     const onhandlePost = (data) => {
-        const { email, username, password, height, weight, age } = data;
-        const postData = { email, username, password, gender: selectedGender, height, weight, age, activity };
+        const { username, password, height, weight, age } = data;
+        const postData = { username, password, gender: selectedGender, height, weight, age, activity };
         console.log('data 으악', data);
         console.log('postData 젠장', postData);
 
         updateApi(postData).then((res) => {
-            if (res.status === 200) {
+            if (res.status === 202) {
                 navigate(`/main`, { replace: true });
             } else {
                 alert('업로드 실패.');
@@ -90,16 +90,14 @@ const MyPage = () => {
         const data = new FormData(e.currentTarget);
         console.log(data, '너는 뭐야');
         const joinData = {
-            email: data.get('email'),
             username: data.get('username'),
             password: data.get('password'),
             rePassword: data.get('rePassword'),
-            gender: data.get('gender'),
             height: data.get('height'),
             weight: data.get('weight'),
             age: data.get('age'),
         };
-        const { age, city, email, username, password, rePassword, gender, height, weight } = joinData;
+        const { age, username, password, rePassword, height, weight } = joinData;
         console.log(joinData, '123');
 
         // 비밀번호 유효성 체크
@@ -207,7 +205,7 @@ const MyPage = () => {
                                     <FormControl required sx={{ ml: 1, minWidth: 50 }}>
                                         <InputLabel id="demo-simple-select-label">나이</InputLabel>
                                         <Input
-                                            defaultValue={user.age}
+                                            value={user.age}
                                             id="age"
                                             name="age"
                                             type="number"

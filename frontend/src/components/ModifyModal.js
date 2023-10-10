@@ -19,9 +19,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandPointRight, faL, faSearch } from '@fortawesome/free-solid-svg-icons';
 import './Backdrop.css';
 import axios from 'axios';
-import { todayRecordApi, updateRecordApi } from '../API';
+import { updateRecordApi } from '../API';
+import { useSearchParams } from 'react-router-dom';
 
-export default function ModifyModal({ dietData }) {
+export default function ModifyModal({ dietData, setDietData, render }) {
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,7 +34,7 @@ export default function ModifyModal({ dietData }) {
     const [selectedData, setSelectedData] = useState(null);
 
     // const [isDelete, setIsDelete] = useState(false);
-
+    console.log(dietData, '너누구?');
     const [dropdown, setDropdown] = useState(false);
     const [responseData, setResponseData] = useState([]); // API 응답 데이터를 상태로 관리
 
@@ -47,16 +48,23 @@ export default function ModifyModal({ dietData }) {
     });
 
     const [diet, setDiet] = useState([]);
-    const [quantity, setQuantity] = useState(1);
+    const [modifiedDiet, setModifiedDiet] = useState([]);
+    const [selectedDiet, setSelectedDiet] = useState([]);
+    const [deletedDiet, setDeletedDiet] = useState([]);
+    const [searchParams] = useSearchParams();
 
     const choiceDiet = (diet) => {
         const formattedDiet = {
-            food_name: diet.DESC_KOR,
-            food_gram: diet.SERVING_SIZE,
-            food_calorie: diet.NUTR_CONT1,
+            selected_diet: {
+                food_name: diet.DESC_KOR,
+                food_gram: diet.SERVING_SIZE,
+                food_calorie: diet.NUTR_CONT1,
+            },
+            food_quantity: 1,
         };
 
         setDiet((prev) => [...prev, formattedDiet]);
+        setSelectedDiet((prev) => [...prev, formattedDiet]);
         setDropdown(false);
         setResponseData([]);
     };
@@ -81,7 +89,7 @@ export default function ModifyModal({ dietData }) {
             // 모달이 열릴 때 추가된 내용을 불러오는 API 호출 또는 다른 데이터 로딩 로직을 추가합니다.
             // 이 예제에서는 빈 배열을 사용하여 모달이 열릴 때마다 빈 데이터를 표시하도록 했습니다.
             setResponseData([]);
-            setDiet(dietData.selected_diet);
+            setDiet([...dietData.selected_diet_quantity]);
             // console.log('값이 왜이래', dietData.selected_diet);
             setSelectedMealType(dietData.meal_category);
         }
@@ -126,28 +134,17 @@ export default function ModifyModal({ dietData }) {
     };
 
     const saveDiets = () => {
-        if (diet.length === 0 || !selectedMealType) {
-            alert('되겠냐');
-            return;
-        }
-        console.log('방울뱀이다', diet);
-        const selected_diet = [];
-        for (let item in diet) {
-            const mealData = {
-                food_name: diet[item].DESC_KOR,
-                food_calorie: diet[item].NUTR_CONT1 * quantity,
-                food_gram: diet[item].SERVING_SIZE,
-                food_quantity: quantity,
-            };
-            selected_diet.push(mealData);
-        }
         const data = {
-            meal_category: selectedMealType,
+            selected_diet: selectedDiet,
+            deleted_diet: deletedDiet,
+            modified_diet: modifiedDiet,
             meal_calorie: sumCal(),
-            selected_diet,
         };
-        console.log('todaydata', data);
-        updateRecordApi(data);
+        console.log('data', data);
+        updateRecordApi(searchParams.get('created_date'), selectedMealType, data).then((response) =>
+            setDietData((prev) => ({ ...prev, [selectedMealType]: response.data }))
+        );
+        render((prev) => !prev);
         onClose();
     };
 
@@ -188,10 +185,55 @@ export default function ModifyModal({ dietData }) {
         for (let item in diet) {
             // console.log('열량', item);
             // console.log('식단', diet);
-            result += +diet[item].food_calorie;
+            result += +diet[item].selected_diet.food_calorie * diet[item].food_quantity;
         }
         return result.toFixed(2);
     }
+
+    const compareItem = (item) => {
+        const comparedItem = item.selected_diet.food_name;
+
+        if (modifiedDiet.length > 0) {
+            // modifiedDiet 배열에 element가 존재하면 item과 element들 비교
+            for (let i in modifiedDiet) {
+                if (comparedItem === modifiedDiet[i].selected_diet.food_name) {
+                    // item과 같은 element가 이미 존재하면 quantity만 수정하고 함수 종료
+                    modifiedDiet[i].food_quantity = item.food_quantity;
+                    return;
+                }
+            }
+        }
+
+        for (let diet in dietData.selected_diet_quantity) {
+            // 기존 diet와 item 비교하여 수정한 item이 기존 diet에 속해 있으면 modifiedDiet에 추가
+            if (comparedItem === dietData.selected_diet_quantity[diet].selected_diet.food_name) {
+                setModifiedDiet((prev) => [...prev, item]);
+            }
+        }
+    };
+
+    const selectedDietQuantity = (item) => {
+        // selectedDiet에 element 없을 시, 함수 종료
+        if (selectedDiet.length === 0) return;
+
+        // item이 selectedDiet에 존재하면 selectedDiet 내 item과 같은 element의 quantity 수정
+        for (let i in selectedDiet) {
+            if (item.selected_diet.food_name === selectedDiet[i].selected_diet.food_name) {
+                selectedDiet[i].food_quantity = item.food_quantity;
+                return;
+            }
+        }
+    };
+
+    const addDeletedDiet = (item) => {
+        for (let diet in dietData.selected_diet_quantity) {
+            // 기존 diet와 item 비교하여 삭제한 item이 기존 diet에 속해 있으면 deletedDiet에 추가
+            if (item.selected_diet.food_name === dietData.selected_diet_quantity[diet].selected_diet.food_name) {
+                setDeletedDiet((prev) => [...prev, item]);
+                return;
+            }
+        }
+    };
 
     return (
         <>
@@ -288,17 +330,28 @@ export default function ModifyModal({ dietData }) {
                                 <ul className="choiceData">
                                     {diet?.map((item, index) => (
                                         <div className="searchList" key={index}>
-                                            <li className="searchLine">{item.food_name}</li>
-                                            <li className="searchLine">{item.food_gram}</li>
+                                            <li className="searchLine">{item?.selected_diet?.food_name}</li>
+                                            <li className="searchLine">{item?.selected_diet?.food_gram}</li>
                                             <input
                                                 className="searchLine"
                                                 type="number"
-                                                defaultValue={item.food_quantity}
+                                                defaultValue={item?.food_quantity}
                                                 onChange={(e) => {
-                                                    setQuantity(parseInt(e.target.value), 10);
+                                                    item.food_quantity = e.target.value;
+                                                    compareItem(item);
+                                                    selectedDietQuantity(item);
+                                                    setDiet((prev) => [
+                                                        ...prev.slice(0, index),
+                                                        item,
+                                                        ...prev.slice(index + 1),
+                                                    ]);
+                                                    console.log('수정배열', modifiedDiet);
+                                                    console.log('추가배열', selectedDiet);
                                                 }}
                                             />
-                                            <li className="searchLine">{item.food_calorie * quantity}</li>
+                                            <li className="searchLine">
+                                                {item.selected_diet?.food_calorie * item?.food_quantity}
+                                            </li>
                                             <button
                                                 className="deleteBtn"
                                                 aria-label="delete"
@@ -306,6 +359,7 @@ export default function ModifyModal({ dietData }) {
                                                 onClick={() => {
                                                     console.log('IconButton가 클릭되었습니다');
                                                     handleDeleteItem(index);
+                                                    addDeletedDiet(item);
                                                 }} // 삭제 버튼을 클릭하면 항목 삭제 함수 호출
                                             >
                                                 <DeleteIcon />

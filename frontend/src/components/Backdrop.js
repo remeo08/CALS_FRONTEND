@@ -20,6 +20,7 @@ import { faHandPointRight, faL, faSearch } from '@fortawesome/free-solid-svg-ico
 import './Backdrop.css';
 import axios from 'axios';
 import { todayRecordApi } from '../API';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Backdrop({ userDietInfo }) {
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
@@ -47,9 +48,10 @@ export default function Backdrop({ userDietInfo }) {
     });
 
     const [diet, setDiet] = useState([]);
-    const [quantity, setQuantity] = useState(1);
+    const [searchPrams] = useSearchParams();
 
     const choiceDiet = (diet) => {
+        diet.food_quantity = 1;
         setDiet((prev) => [...prev, diet]);
         setDropdown(false);
         setResponseData([]);
@@ -130,9 +132,9 @@ export default function Backdrop({ userDietInfo }) {
         for (let item in diet) {
             const mealData = {
                 food_name: diet[item].DESC_KOR,
-                food_calorie: diet[item].NUTR_CONT1 * quantity,
+                food_calorie: diet[item].NUTR_CONT1,
                 food_gram: diet[item].SERVING_SIZE,
-                food_quantity: quantity,
+                food_quantity: diet[item].food_quantity,
             };
             selected_diet.push(mealData);
         }
@@ -140,8 +142,9 @@ export default function Backdrop({ userDietInfo }) {
             meal_category: selectedMealType,
             meal_calorie: sumCal(),
             selected_diet,
+            created_date: searchPrams.get('created_date'),
         };
-        // console.log('todaydata', data);
+        console.log('todaydata', data);
         todayRecordApi(data).then((response) => userDietInfo((prev) => [...prev, response.data]));
         setDiet([]);
         setSelectedMealType(null);
@@ -186,7 +189,7 @@ export default function Backdrop({ userDietInfo }) {
         for (let item in diet) {
             // console.log('열량', item);
             // console.log('식단', diet);
-            result += +diet[item].NUTR_CONT1;
+            result += +diet[item].NUTR_CONT1 * diet[item].food_quantity;
         }
         return result.toFixed(2);
     }
@@ -279,8 +282,8 @@ export default function Backdrop({ userDietInfo }) {
                                 <ul className="searchTitle">
                                     <li>식품이름</li>
                                     <li>총 내용량(g)</li>
-                                    <li>수량</li>
                                     <li>열량(kcal)</li>
+                                    <li>수량</li>
                                     <li>삭제</li>
                                 </ul>
                                 <ul className="choiceData">
@@ -288,15 +291,21 @@ export default function Backdrop({ userDietInfo }) {
                                         <div className="searchList" key={index}>
                                             <li className="searchLine">{item.DESC_KOR}</li>
                                             <li className="searchLine">{item.SERVING_SIZE}</li>
+                                            <li className="searchLine">{item.NUTR_CONT1 * item.food_quantity}</li>
                                             <input
                                                 className="searchLine"
                                                 type="number"
-                                                defaultValue={1}
+                                                defaultValue={item.food_quantity}
+                                                maxLength={1}
                                                 onChange={(e) => {
-                                                    setQuantity(parseInt(e.target.value), 10);
+                                                    item.food_quantity = e.target.value;
+                                                    setDiet((prev) => [
+                                                        ...prev.slice(0, index),
+                                                        item,
+                                                        ...prev.slice(index + 1),
+                                                    ]);
                                                 }}
                                             />
-                                            <li className="searchLine">{item.NUTR_CONT1 * quantity}</li>
                                             <button
                                                 className="deleteBtn"
                                                 aria-label="delete"

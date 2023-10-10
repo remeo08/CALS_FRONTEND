@@ -4,7 +4,7 @@ import './Header.css';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
-const Header = () => {
+const Header = ({ userData }) => {
     const navigate = useNavigate();
     const [nickname, setNickname] = useState('');
     // const [cookies, getCookie] = useCookies();
@@ -20,7 +20,7 @@ const Header = () => {
         navigate('/');
     };
     useEffect(() => {
-        UserApi().then((res) => setNickname(res.data?.username));
+        setNickname(userData?.username);
     }, []);
 
     return (

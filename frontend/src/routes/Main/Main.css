@@ -163,3 +163,7 @@ h1 {
     font-weight: bolder;
     padding-top: 10px;
 }
+
+.fontBold {
+    font-weight: bolder;
+}
