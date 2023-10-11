@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 
 const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/v1/',
+    baseURL: 'https://port-0-cals-backend-12fhqa2blnlgeq27.sel5.cloudtype.app/api/v1/',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
