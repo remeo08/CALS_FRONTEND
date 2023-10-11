@@ -22,7 +22,7 @@ import axios from 'axios';
 import { updateRecordApi } from '../API';
 import { useSearchParams } from 'react-router-dom';
 
-export default function ModifyModal({ dietData, setDietData, render }) {
+export default function ModifyModal({ dietData, setDietData, setUserDietData }) {
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,7 +34,6 @@ export default function ModifyModal({ dietData, setDietData, render }) {
     const [selectedData, setSelectedData] = useState(null);
 
     // const [isDelete, setIsDelete] = useState(false);
-    console.log(dietData, '너누구?');
     const [dropdown, setDropdown] = useState(false);
     const [responseData, setResponseData] = useState([]); // API 응답 데이터를 상태로 관리
 
@@ -140,11 +139,17 @@ export default function ModifyModal({ dietData, setDietData, render }) {
             modified_diet: modifiedDiet,
             meal_calorie: sumCal(),
         };
-        console.log('data', data);
-        updateRecordApi(searchParams.get('created_date'), selectedMealType, data).then((response) =>
-            setDietData((prev) => ({ ...prev, [selectedMealType]: response.data }))
-        );
-        render((prev) => !prev);
+        updateRecordApi(searchParams.get('created_date'), selectedMealType, data).then((response) => {
+            setDietData((prev) => ({ ...prev, [selectedMealType]: response.data }));
+            setUserDietData((prev) => {
+                for (let i in prev) {
+                    if (prev[i].meal_category === selectedMealType) {
+                        prev[i] = response.data;
+                    }
+                    return [...prev];
+                }
+            });
+        });
         onClose();
     };
 
@@ -345,8 +350,6 @@ export default function ModifyModal({ dietData, setDietData, render }) {
                                                         item,
                                                         ...prev.slice(index + 1),
                                                     ]);
-                                                    console.log('수정배열', modifiedDiet);
-                                                    console.log('추가배열', selectedDiet);
                                                 }}
                                             />
                                             <li className="searchLine">

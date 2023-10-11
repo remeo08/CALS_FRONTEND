@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import './CalorieIntake.css';
 import { reviewApi, updateApi } from '../API';
@@ -9,6 +9,10 @@ const CalorieIntake = ({ userDietInfo, userData }) => {
     const [review, setReview] = useState('');
     const [weightValue, setWeightValue] = useState();
     const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        setReview(userDietInfo[0]?.daily_review);
+    }, [userDietInfo]);
 
     const reviewChange = () => {
         reviewApi(searchParams.get('created_date'), { daily_review: review });
@@ -62,7 +66,7 @@ const CalorieIntake = ({ userDietInfo, userData }) => {
                         <input
                             className="intakeInput"
                             type="text"
-                            defaultValue={userDietInfo[0]?.daily_review}
+                            defaultValue={review}
                             onChange={(e) => {
                                 setReview(e.target.value);
                             }}

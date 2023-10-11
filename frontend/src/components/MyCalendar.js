@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // css import
 import './MyCalendar.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import moment from 'moment';
 
 const MyCalendar = ({ dotDate }) => {
-    const [value, onChange] = useState(new Date());
+    const [searchParams] = useSearchParams();
+    const [value, onChange] = useState(new Date(searchParams.get('created_date')));
     const navigate = useNavigate();
 
     function selectDate(d) {
@@ -15,8 +16,8 @@ const MyCalendar = ({ dotDate }) => {
         let month = d.getMonth() + 1; // 월
         let date = d.getDate(); // 날짜
 
-        const todayDate = year + '-' + month + '-' + date;
-        navigate(`?created_date=${todayDate}`);
+        const selectedDate = year + '-' + month + '-' + date;
+        navigate(`?created_date=${selectedDate}`);
     }
 
     return (

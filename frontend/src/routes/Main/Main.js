@@ -20,7 +20,10 @@ const Main = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [dotDate, setDotDate] = useState([]);
-    const [dummy, setDummy] = useState(false);
+
+    const setUserDietData = (callback) => {
+        setUserDietInfo(callback);
+    };
 
     useEffect(() => {
         let today = new Date();
@@ -47,14 +50,14 @@ const Main = () => {
             }
         });
         userDataApi(searchParams.get('created_date')).then((response) => {
-            console.log('rere', response);
             if (response.status === 200) {
-                console.log('djasfhabfa');
                 setUserDietInfo(response.data.data);
+
                 setDotDate(response.data.diet_saved_date);
             }
         });
     }, [accessToken, searchParams]);
+
     return (
         <div className="MainContainer">
             <Header userData={userData} key={userData} />
@@ -92,7 +95,11 @@ const Main = () => {
                                 </div>
                             ) : (
                                 <div>
-                                    <UserDiet diet={userDietInfo} key={userDietInfo} render={setDummy} />
+                                    <UserDiet
+                                        diet={userDietInfo}
+                                        key={userDietInfo}
+                                        setUserDietData={setUserDietData}
+                                    />
                                 </div>
                             )}
                         </div>

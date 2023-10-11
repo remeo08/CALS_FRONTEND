@@ -4,15 +4,16 @@ import ModifyModal from './ModifyModal';
 import { Button } from '@chakra-ui/react';
 import { deleteRecordApi } from '../API';
 
-const UserDiet = ({ diet, render }) => {
+const UserDiet = ({ diet, setUserDietData }) => {
     const [dietData, setDietData] = useState({ breakfast: {}, lunch: {}, dinner: {}, snack: {} });
 
     useEffect(() => {
-        console.log(diet, '바꼈냐 이자식아');
+        setDietData({ breakfast: {}, lunch: {}, dinner: {}, snack: {} });
+
         for (let i in diet) {
             setDietData((prev) => ({ ...prev, [diet[i]['meal_category']]: diet[i] }));
         }
-    }, []);
+    }, [diet]);
 
     const remove = (category) => {
         let today = new Date();
@@ -66,7 +67,11 @@ const UserDiet = ({ diet, render }) => {
                         </Button>
                     ) : null}
                     {dietData['breakfast']?.meal_calorie ? (
-                        <ModifyModal render={render} setDietData={setDietData} dietData={dietData['breakfast']} />
+                        <ModifyModal
+                            setUserDietData={setUserDietData}
+                            setDietData={setDietData}
+                            dietData={dietData['breakfast']}
+                        />
                     ) : null}
                 </div>
             </div>
@@ -105,7 +110,11 @@ const UserDiet = ({ diet, render }) => {
                         </Button>
                     ) : null}
                     {dietData['lunch']?.meal_calorie ? (
-                        <ModifyModal setDietData={setDietData} dietData={dietData['lunch']} />
+                        <ModifyModal
+                            setUserDietData={setUserDietData}
+                            setDietData={setDietData}
+                            dietData={dietData['lunch']}
+                        />
                     ) : null}
                 </div>
             </div>
@@ -144,7 +153,11 @@ const UserDiet = ({ diet, render }) => {
                         </Button>
                     ) : null}
                     {dietData['dinner']?.meal_calorie ? (
-                        <ModifyModal setDietData={setDietData} dietData={dietData['dinner']} />
+                        <ModifyModal
+                            setUserDietData={setUserDietData}
+                            setDietData={setDietData}
+                            dietData={dietData['dinner']}
+                        />
                     ) : null}
                 </div>
             </div>
@@ -183,7 +196,11 @@ const UserDiet = ({ diet, render }) => {
                         </Button>
                     ) : null}
                     {dietData['snack']?.meal_calorie ? (
-                        <ModifyModal setDietData={setDietData} dietData={dietData['snack']} />
+                        <ModifyModal
+                            setUserDietData={setUserDietData}
+                            setDietData={setDietData}
+                            dietData={dietData['snack']}
+                        />
                     ) : null}
                 </div>
             </div>
