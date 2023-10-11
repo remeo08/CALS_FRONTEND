@@ -163,7 +163,7 @@ export default function ModifyModal({ dietData, setDietData, setUserDietData }) 
         }
 
         axios
-            .get(`http://openapi.foodsafetykorea.go.kr/api/f30c1df1d23246dcbc9a/I2790/json/0/100/DESC_KOR=${search}`)
+            .get(`http://openapi.foodsafetykorea.go.kr/api/${process.env.REACT_APP_SERVICE_KEY}/I2790/json/0/100/DESC_KOR=${search}`)
             .then((response) => {
                 console.log('API 응답 데이터:', response.data);
 
