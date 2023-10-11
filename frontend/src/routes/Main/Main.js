@@ -20,9 +20,13 @@ const Main = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [dotDate, setDotDate] = useState([]);
+    console.log('dotDate??  뭐들었는디', dotDate);
 
     const setUserDietData = (callback) => {
         setUserDietInfo(callback);
+    };
+    const setUser = (callback) => {
+        setUserData(callback);
     };
 
     useEffect(() => {
@@ -74,14 +78,19 @@ const Main = () => {
                         <div className="cardTitle2">
                             <div className="fontBold">오늘의 하루</div>
                         </div>
-                        <CalorieIntake userDietInfo={userDietInfo} key={userDietInfo} userData={userData} />
+                        <CalorieIntake
+                            userDietInfo={userDietInfo}
+                            key={userDietInfo}
+                            userData={userData}
+                            setUser={setUser}
+                        />
                     </div>
                 </div>
                 <div className="menu-3">
                     <div className="card card_3">
                         <div className="image">
                             <div className="fontBold">꿀꿀 식단</div>
-                            <Backdrop userDietInfo={setUserDietInfo} />
+                            <Backdrop userDietInfo={setUserDietInfo} setDotDate={setDotDate} />
                         </div>
                         <div className="dataBox">
                             {userDietInfo?.length === 0 ? (
@@ -99,6 +108,7 @@ const Main = () => {
                                         diet={userDietInfo}
                                         key={userDietInfo}
                                         setUserDietData={setUserDietData}
+                                        setDotDate={setDotDate}
                                     />
                                 </div>
                             )}

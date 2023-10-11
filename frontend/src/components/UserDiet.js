@@ -3,9 +3,12 @@ import './UserDiet.css';
 import ModifyModal from './ModifyModal';
 import { Button } from '@chakra-ui/react';
 import { deleteRecordApi } from '../API';
+import { useSearchParams } from 'react-router-dom';
 
-const UserDiet = ({ diet, setUserDietData }) => {
+const UserDiet = ({ diet, setUserDietData, setDotDate }) => {
     const [dietData, setDietData] = useState({ breakfast: {}, lunch: {}, dinner: {}, snack: {} });
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
         setDietData({ breakfast: {}, lunch: {}, dinner: {}, snack: {} });
@@ -16,15 +19,15 @@ const UserDiet = ({ diet, setUserDietData }) => {
     }, [diet]);
 
     const remove = (category) => {
-        let today = new Date();
-
-        let year = today.getFullYear(); // 년도
-        let month = today.getMonth() + 1; // 월
-        let date = today.getDate(); // 날짜
-
-        const todayDate = year + '-' + month + '-' + date;
-
-        deleteRecordApi(todayDate, category).then(() => setDietData((prev) => ({ ...prev, [category]: {} })));
+        deleteRecordApi(searchParams.get('created_date'), category).then(() => {
+            setDietData((prev) => ({ ...prev, [category]: {} }));
+            setDotDate((prev) => {
+                console.log('삭제 날짜', searchParams.get('created_date'));
+                console.log('삭제 날짜 타입', typeof searchParams.get('created_date'));
+                console.log('기존 날짜', typeof prev[0]);
+                return [...prev.filter((x) => x !== searchParams.get('created_date'))];
+            });
+        });
         // setDietData((prev) => ({ ...prev, [category]: {} }))
     };
 

@@ -22,7 +22,7 @@ import axios from 'axios';
 import { todayRecordApi } from '../API';
 import { useSearchParams } from 'react-router-dom';
 
-export default function Backdrop({ userDietInfo }) {
+export default function Backdrop({ userDietInfo, setDotDate }) {
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -145,7 +145,10 @@ export default function Backdrop({ userDietInfo }) {
             created_date: searchPrams.get('created_date'),
         };
         console.log('todaydata', data);
-        todayRecordApi(data).then((response) => userDietInfo((prev) => [...prev, response.data]));
+        todayRecordApi(data).then((response) => {
+            userDietInfo((prev) => [...prev, response.data]);
+            setDotDate((prev) => [...prev, response.data.created_date]);
+        });
         setDiet([]);
         setSelectedMealType(null);
         setSearch('');

@@ -4,7 +4,7 @@ import './CalorieIntake.css';
 import { reviewApi, updateApi } from '../API';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-const CalorieIntake = ({ userDietInfo, userData }) => {
+const CalorieIntake = ({ userDietInfo, userData, setUser }) => {
     const Star = ({ selected }) => <FaStar color={selected ? 'rgb(231, 69, 228)' : 'gray'} />;
     const [review, setReview] = useState('');
     const [weightValue, setWeightValue] = useState();
@@ -19,8 +19,14 @@ const CalorieIntake = ({ userDietInfo, userData }) => {
     };
 
     const weightChange = () => {
-        updateApi({ weight: weightValue });
+        updateApi({ weight: weightValue }).then((response) =>
+            setUser((prev) => ({ ...prev, recommended_calorie: response.data.recommended_calorie }))
+        );
     };
+
+    useEffect(() => {
+        setWeightValue();
+    }, [userData]);
     return (
         <div className="CalorieIntakeContainer">
             <div className="leftBox">
@@ -55,13 +61,12 @@ const CalorieIntake = ({ userDietInfo, userData }) => {
                     오늘의 점수
                     <div className="star intakeText">
                         {[...Array(5)].map((n, i) => (
-                            <Star key={i} selected={userDietInfo[0] ? userDietInfo[0]?.daily_star_rating : 5 > i} />
+                            <Star key={i} selected={userDietInfo[0] ? userDietInfo[0]?.daily_star_rating > i : 5} />
                         ))}
                     </div>
                 </div>
                 <div className="CalorieIntakeText line_4">
                     오늘의 한줄평
-                    {/* <div>{userDietInfo[0]?.daily_review}</div> */}
                     <div className="intakeText">
                         <input
                             className="intakeInput"

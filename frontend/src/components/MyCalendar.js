@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // css import
 import './MyCalendar.css';
@@ -8,6 +8,7 @@ import moment from 'moment';
 const MyCalendar = ({ dotDate }) => {
     const [searchParams] = useSearchParams();
     const [value, onChange] = useState(new Date(searchParams.get('created_date')));
+    console.log('오늘 몇일', value);
     const navigate = useNavigate();
 
     function selectDate(d) {
@@ -19,6 +20,10 @@ const MyCalendar = ({ dotDate }) => {
         const selectedDate = year + '-' + month + '-' + date;
         navigate(`?created_date=${selectedDate}`);
     }
+
+    useEffect(() => {
+        onChange(searchParams.get('created_date'));
+    }, [value]);
 
     return (
         <div className="MyCalendarContainer">
