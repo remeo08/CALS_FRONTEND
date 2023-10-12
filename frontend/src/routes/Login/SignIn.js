@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,7 +11,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
 import './SignIn.css';
-import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { SignInApi } from '../../API';
 
@@ -33,8 +30,6 @@ import { SignInApi } from '../../API';
 const defaultTheme = createTheme();
 
 function SignIn() {
-    const [signInError, setSignInError] = useState('');
-
     const navigate = useNavigate();
 
     const [cookies, setCookie] = useCookies(['access_token']);
@@ -74,8 +69,6 @@ function SignIn() {
 
         SignInApi(loginData)
             .then((responseData) => {
-                // 성공적으로 데이터를 가져온 경우 실행할 코드
-                console.log(responseData, '성공');
                 // JWT 토큰을 쿠키에 저장합니다.
                 setCookie('access_token', responseData.access, { path: '/' });
                 setRefresh('refresh_token', responseData.refresh, { path: '/' });
@@ -86,7 +79,7 @@ function SignIn() {
             .catch((error) => {
                 // 오류 발생 시 실행할 코드
                 console.error(error);
-                setSignInError('로그인에 실패하였습니다. 다시한번 확인해 주세요.');
+                alert('로그인에 실패하였습니다. 다시 한번 확인해 주세요.');
             });
     };
 

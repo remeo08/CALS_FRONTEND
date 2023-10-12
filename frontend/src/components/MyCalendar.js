@@ -8,7 +8,6 @@ import moment from 'moment';
 const MyCalendar = ({ dotDate }) => {
     const [searchParams] = useSearchParams();
     const [value, onChange] = useState(new Date(searchParams.get('created_date')));
-    console.log('오늘 몇일', value);
     const navigate = useNavigate();
 
     function selectDate(d) {

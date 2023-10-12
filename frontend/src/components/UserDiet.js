@@ -22,9 +22,6 @@ const UserDiet = ({ diet, setUserDietData, setDotDate }) => {
         deleteRecordApi(searchParams.get('created_date'), category).then(() => {
             setDietData((prev) => ({ ...prev, [category]: {} }));
             setDotDate((prev) => {
-                console.log('삭제 날짜', searchParams.get('created_date'));
-                console.log('삭제 날짜 타입', typeof searchParams.get('created_date'));
-                console.log('기존 날짜', typeof prev[0]);
                 return [...prev.filter((x) => x !== searchParams.get('created_date'))];
             });
         });

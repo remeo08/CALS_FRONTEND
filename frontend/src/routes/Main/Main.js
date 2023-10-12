@@ -15,12 +15,10 @@ const Main = () => {
     const navigate = useNavigate();
     const [userDietInfo, setUserDietInfo] = useState([]);
     const [userData, setUserData] = useState();
-    console.log('너는 뭐냐', userDietInfo);
 
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [dotDate, setDotDate] = useState([]);
-    console.log('dotDate??  뭐들었는디', dotDate);
 
     const setUserDietData = (callback) => {
         setUserDietInfo(callback);

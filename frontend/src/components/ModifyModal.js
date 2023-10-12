@@ -89,7 +89,6 @@ export default function ModifyModal({ dietData, setDietData, setUserDietData }) 
             // 이 예제에서는 빈 배열을 사용하여 모달이 열릴 때마다 빈 데이터를 표시하도록 했습니다.
             setResponseData([]);
             setDiet([...dietData.selected_diet_quantity]);
-            // console.log('값이 왜이래', dietData.selected_diet);
             setSelectedMealType(dietData.meal_category);
         }
     }, [isOpen]);
@@ -156,7 +155,6 @@ export default function ModifyModal({ dietData, setDietData, setUserDietData }) 
     // 검색 아이콘 클릭 시 API 요청을 보내는 함수
     const handleSearch = (e) => {
         e.preventDefault();
-        console.log('handleSearch 함수가 호출되었습니다.');
         // 검색어가 비어 있을 경우 요청을 보내지 않음
         if (!search) {
             return;
@@ -165,8 +163,6 @@ export default function ModifyModal({ dietData, setDietData, setUserDietData }) 
         axios
             .get(`https://openapi.foodsafetykorea.go.kr/api/${process.env.REACT_APP_SERVICE_KEY}/I2790/json/0/100/DESC_KOR=${search}`)
             .then((response) => {
-                console.log('API 응답 데이터:', response.data);
-
                 const responseData = response.data.I2790.row;
 
                 if (responseData && responseData.length > 0) {
@@ -183,13 +179,10 @@ export default function ModifyModal({ dietData, setDietData, setUserDietData }) 
                 setError(error);
             });
     };
-    // console.log('들어오냐?', responseData);
 
     function sumCal() {
         let result = 0;
         for (let item in diet) {
-            // console.log('열량', item);
-            // console.log('식단', diet);
             result += +diet[item].selected_diet.food_calorie * diet[item].food_quantity;
         }
         return result.toFixed(2);
@@ -360,7 +353,6 @@ export default function ModifyModal({ dietData, setDietData, setUserDietData }) 
                                                 aria-label="delete"
                                                 sx={{ backgroundColor: 'white' }}
                                                 onClick={() => {
-                                                    console.log('IconButton가 클릭되었습니다');
                                                     handleDeleteItem(index);
                                                     addDeletedDiet(item);
                                                 }} // 삭제 버튼을 클릭하면 항목 삭제 함수 호출
@@ -380,15 +372,6 @@ export default function ModifyModal({ dietData, setDietData, setUserDietData }) 
                         <Button
                             sx={{ marginLeft: 2 }}
                             onClick={() => {
-                                if (selectedMealType && selectedData) {
-                                    // 선택한 식사 유형과 데이터를 저장하는 방법을 처리합니다.
-                                    console.log(`선택한 식사 유형: ${selectedMealType}`);
-                                    console.log('선택한 데이터:', selectedData);
-
-                                    // 여기에 선택한 식사 유형과 데이터를 저장하는 로직을 추가하세요.
-                                    // 예를 들어, 상태 변수나 다른 저장 방식을 사용하여 데이터를 저장할 수 있습니다.
-                                }
-                                // 모달을 닫습니다.
                                 saveDiets();
                             }}
                         >

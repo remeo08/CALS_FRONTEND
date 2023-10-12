@@ -72,8 +72,6 @@ const MyPage = () => {
     const onhandlePost = (data) => {
         const { username, password, height, weight, age } = data;
         const postData = { username, password, gender: selectedGender, height, weight, age, activity };
-        console.log('data 으악', data);
-        console.log('postData 젠장', postData);
 
         updateApi(postData).then((res) => {
             if (res.status === 202) {
@@ -88,7 +86,6 @@ const MyPage = () => {
         e.preventDefault();
 
         const data = new FormData(e.currentTarget);
-        console.log(data, '너는 뭐야');
         const joinData = {
             username: data.get('username'),
             password: data.get('password'),
@@ -98,7 +95,6 @@ const MyPage = () => {
             age: data.get('age'),
         };
         const { age, username, password, rePassword, height, weight } = joinData;
-        console.log(joinData, '123');
 
         // 비밀번호 유효성 체크
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
@@ -117,9 +113,7 @@ const MyPage = () => {
         // if (passwordRegex.test(password) && password === rePassword && nameRegex.test(username) && checked) {
         if (passwordRegex.test(password) && password === rePassword && nameRegex.test(username)) {
             onhandlePost(joinData);
-            console.log('juhu');
         }
-        console.log('weoriu');
     };
     useEffect(() => {
         UserApi().then((res) => {

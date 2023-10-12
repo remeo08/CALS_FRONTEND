@@ -124,10 +124,9 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
 
     const saveDiets = () => {
         if (diet.length === 0 || !selectedMealType) {
-            alert('되겠냐');
+            alert('식사 시간을 선택해주세요.');
             return;
         }
-        // console.log('방울뱀이다', diet);
         const selected_diet = [];
         for (let item in diet) {
             const mealData = {
@@ -144,7 +143,6 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
             selected_diet,
             created_date: searchPrams.get('created_date'),
         };
-        console.log('todaydata', data);
         todayRecordApi(data).then((response) => {
             userDietInfo((prev) => [...prev, response.data]);
             setDotDate((prev) => [...prev, response.data.created_date]);
@@ -158,7 +156,6 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
     // 검색 아이콘 클릭 시 API 요청을 보내는 함수
     const handleSearch = (e) => {
         e.preventDefault();
-        console.log('handleSearch 함수가 호출되었습니다.');
         // 검색어가 비어 있을 경우 요청을 보내지 않음
         if (!search) {
             return;
@@ -167,7 +164,6 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
         axios
             .get(`https://openapi.foodsafetykorea.go.kr/api/${process.env.REACT_APP_SERVICE_KEY}/I2790/json/0/100/DESC_KOR=${search}`)
             .then((response) => {
-                console.log('API 응답 데이터:', response.data);
 
                 const responseData = response.data.I2790.row;
 
@@ -185,13 +181,10 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
                 setError(error);
             });
     };
-    // console.log('들어오냐?', responseData);
 
     function sumCal() {
         let result = 0;
         for (let item in diet) {
-            // console.log('열량', item);
-            // console.log('식단', diet);
             result += +diet[item].NUTR_CONT1 * diet[item].food_quantity;
         }
         return result.toFixed(2);
@@ -314,7 +307,6 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
                                                 aria-label="delete"
                                                 sx={{ backgroundColor: 'white' }}
                                                 onClick={() => {
-                                                    console.log('IconButton가 클릭되었습니다');
                                                     handleDeleteItem(index);
                                                 }} // 삭제 버튼을 클릭하면 항목 삭제 함수 호출
                                             >
@@ -333,15 +325,6 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
                         <Button
                             sx={{ marginLeft: 2 }}
                             onClick={() => {
-                                if (selectedMealType && selectedData) {
-                                    // 선택한 식사 유형과 데이터를 저장하는 방법을 처리합니다.
-                                    console.log(`선택한 식사 유형: ${selectedMealType}`);
-                                    console.log('선택한 데이터:', selectedData);
-
-                                    // 여기에 선택한 식사 유형과 데이터를 저장하는 로직을 추가하세요.
-                                    // 예를 들어, 상태 변수나 다른 저장 방식을 사용하여 데이터를 저장할 수 있습니다.
-                                }
-                                // 모달을 닫습니다.
                                 saveDiets();
                             }}
                         >

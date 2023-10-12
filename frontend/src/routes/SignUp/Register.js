@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
 import {
     Avatar,
     Button,
@@ -19,7 +18,6 @@ import {
     Typography,
     Container,
     Select,
-    SelectChangeEvent,
     Input,
 } from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -80,8 +78,6 @@ const Register = () => {
     const onhandlePost = (data) => {
         const { email, username, password, height, weight, age } = data;
         const postData = { email, username, password, gender: selectedGender, height, weight, age, activity };
-        console.log('data 으악', data);
-        console.log('postData 젠장', postData);
 
         // axios
         //     .post(
@@ -95,7 +91,6 @@ const Register = () => {
         //         // }
         //     )
         //     .then(function (response) {
-        //         console.log(response, '성공');
         //         // JWT 토큰을 쿠키에 저장합니다.
         //         setCookie('access_token', response.data.access_token, { path: '/' });
 
@@ -109,8 +104,6 @@ const Register = () => {
 
         RegisterApi(postData)
             .then((responseData) => {
-                // 성공적으로 데이터를 가져온 경우 실행할 코드
-                console.log(responseData, '성공');
                 // JWT 토큰을 쿠키에 저장합니다.
                 setCookie('access_token', responseData.access, { path: '/' });
                 setRefresh('refresh_token', responseData.refresh, { path: '/' });
@@ -129,7 +122,6 @@ const Register = () => {
         e.preventDefault();
 
         const data = new FormData(e.currentTarget);
-        console.log(data, '너는 뭐야');
         const joinData = {
             email: data.get('email'),
             username: data.get('username'),
@@ -141,7 +133,6 @@ const Register = () => {
             age: data.get('age'),
         };
         const { age, city, email, username, password, rePassword, gender, height, weight } = joinData;
-        console.log(joinData, '123');
 
         // 이메일 유효성 체크
         const emailRegex =
@@ -199,9 +190,6 @@ const Register = () => {
                                 <Grid item xs={12}>
                                     <TextField
                                         required
-                                        onBlur={() => {
-                                            console.log('유효성');
-                                        }}
                                         autoFocus
                                         fullWidth
                                         type="email"

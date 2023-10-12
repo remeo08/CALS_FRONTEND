@@ -59,7 +59,6 @@ instance.interceptors.response.use(
     async (error) => {
         if (error?.response?.status === 401 && !refresh) {
             refresh = true;
-            console.log(getCookie('refresh_token'));
             const response = await instance.post('users/login/token/refresh', { refresh: getCookie('refresh_token') });
             if (response.status === 200) {
                 instance.defaults.headers.common['Authorization'] = `Bearer 
