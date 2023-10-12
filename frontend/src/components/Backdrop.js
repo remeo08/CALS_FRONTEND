@@ -165,7 +165,7 @@ export default function Backdrop({ userDietInfo, setDotDate }) {
         }
 
         axios
-            .get(`http://openapi.foodsafetykorea.go.kr/api/${process.env.REACT_APP_SERVICE_KEY}/I2790/json/0/100/DESC_KOR=${search}`)
+            .get(`https://openapi.foodsafetykorea.go.kr/api/${process.env.REACT_APP_SERVICE_KEY}/I2790/json/0/100/DESC_KOR=${search}`)
             .then((response) => {
                 console.log('API 응답 데이터:', response.data);
 
